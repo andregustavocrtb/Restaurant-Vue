@@ -6,27 +6,38 @@
       color="primary"
       dark
     >
-      <v-btn color="success">Novo Produto</v-btn>
+      <v-btn color="success" @click="showModal = true">Novo Produto</v-btn>
     </v-app-bar>
 
     <v-main>
       <ProductsDashboard/>
+      <transition name="fade" v-if="showModal === true">
+      </transition>
+      <ProductModal v-if="showModal === true"/>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import ProductsDashboard from './views/ProductsDashboard'
+import ProductModal from './components/ProductModal'
 
 export default {
   name: 'App',
 
   components: {
-    ProductsDashboard
+    ProductsDashboard,
+    ProductModal
   },
 
   data: () => ({
-    //
+    showModal: false
   }),
 };
 </script>
+<style>
+.fade-enter-active,
+.fade-leave-active{
+ transition: opacity 0.5s;;
+}
+</style>
