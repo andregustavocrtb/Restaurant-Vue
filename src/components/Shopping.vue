@@ -1,12 +1,14 @@
 <template>
   <v-container>
+    <template>
       <v-card-actions class="butãozinho">
         <v-btn @click="dialog = !dialog" @keypress.esc="dialog = false">
           <v-icon>mdi-cart-outline</v-icon>
           {{ cartCount }}        
         </v-btn>
       </v-card-actions>
-    <v-dialog v-model="dialog">
+    </template>    
+    <v-dialog v-model="dialog" scrollable class="dialog">
       <v-card class="card">
           <div v-for="(product, index) in cart" :key="index">
             <v-card-title>{{ product.name }}</v-card-title>
@@ -67,5 +69,11 @@ export default {
 <style>
 .butãozinho{
   float: right;
+}
+.dialog{
+  display: flex;
+  position: fixed;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 </style>
