@@ -10,7 +10,7 @@
             class="input"
             label="URL da imagem" 
             solo 
-            v-model="product.url"
+            v-model="product.Url"
             flat></v-text-field>
         <v-row>
           <v-col cols="12" md="9">
@@ -19,7 +19,7 @@
                 class="input" 
                 label="Nome do prato" 
                 solo 
-                v-model="product.name"
+                v-model="product.Name"
                 flat></v-text-field>
             </v-col>
             <v-col cols="12" md="3" sm="6">
@@ -29,7 +29,7 @@
                 label="Preço" 
                 value="R$ " 
                 solo 
-                v-model="product.price"
+                v-model="product.Price"
                 flat></v-text-field>
             </v-col>
           </v-row>
@@ -38,9 +38,9 @@
           class="input" 
           label="Descrição do produto" 
           solo
-          v-model="product.description"
+          v-model="product.Description"
           flat></v-text-field>
-        <v-btn color="success" @keypress.esc="!dialog" depressed class="button" @click="addToProducts(product); dialog=!dialog">Adicionar Prato</v-btn>
+        <v-btn color="success" @keypress.esc="!dialog" depressed class="button" @click="addToProducts(); dialog=!dialog">Adicionar Prato</v-btn>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -48,21 +48,28 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data(){
     return{
       dialog: false,
       product:{
-        url: "",
-        name: "",
-        price: "",
-        description: ""
+        Url: "",
+        Name: "",
+        Price: "",
+        Description: ""
       }
     }
   }, methods:{
-    addToProducts(product){
-      this.$store.state.products.push(product)
-      console.log(this.$store.state.products)
+    addToProducts(){
+      let data = {
+        Url: this.product.Url,
+        Name: this.product.Name,
+        Price: this.product.Price,
+        Description: this.product.Description}
+      axios.post('http://localhost:3333/prod', data)
+      .then(response => console.log(response), (e) => console.log(e.response))
     }
   }
 };

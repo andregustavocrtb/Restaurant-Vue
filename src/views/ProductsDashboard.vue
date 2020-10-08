@@ -2,51 +2,64 @@
     <v-container>
         <ProductModal/>
         <v-row >
-        <v-col cols="12" md="4" v-for="(product, index) in products" :key="index">
+        <v-col cols="12" md="4" v-for="product in products" v-bind:key="product.id">
             <v-card class="card">
                 <img
                     class="imagem"
-                    :src="product.url">
+                    :src="product.Url">
                 <v-card-title class="food-title">
-                    {{product.name}}
+                    {{product.Name}}
                 </v-card-title>
                 <v-card-text>
                     <p class="food-description">
-                        {{product.description}}
+                        {{product.Description}}
                     </p>
                     <p class="food-price mt-8">
-                        {{`R$ ${product.price}`}}
+                        {{`R$ ${product.Price}`}}
                     </p>
                     <v-card-actions>
                         <v-icon class="mr-4">mdi-pencil</v-icon>
-                        <v-icon class="mr-4">mdi-delete</v-icon>
-                        <v-switch 
-                        class="switch"
-                        label="Disponível" 
-                        v-model="value"></v-switch>
+                        <v-btn @click="remove(product)" depressed >
+                            <v-icon class="mr-4">mdi-delete</v-icon>
+                        </v-btn>
+                        
                     </v-card-actions>
                 </v-card-text>
             </v-card>
         </v-col>
     </v-row>
+    <v-btn
+        @click="send(product)" 
+        class="switch"
+        >Enviar Produtos ao Usuário</v-btn>
     </v-container>
 </template>
 <script>
 import ProductModal from "../components/ProductModal"
+import axios from 'axios'
 
 export default {
-    props: ["url", "name", "description", "price"],
     data(){
         return{
-            value: ''}
+            products: null,}
     },
     components:{
         ProductModal
     },
-    computed: {
-        products(){
-            return this.$store.getters.products
+    methods: {
+        send(prodArray){
+            this.$store.state.products.push(prodArray)
+            console.log( this.$store.state.products)
+        },
+        getproducts(){
+            axios.get('http://localhost:3333/prod').then(response => (this.products = response.data))
+        },
+        remove(product){
+            axios.delete(`http://localhost:3333/prod${product.id}`)
         }
+    },
+    beforeMount(){
+        this.getproducts()
     }
 }
 </script>

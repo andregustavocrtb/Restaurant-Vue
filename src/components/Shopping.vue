@@ -4,18 +4,17 @@
       <v-card-actions class="butãozinho">
         <v-btn @click="dialog = !dialog" @keypress.esc="dialog = false">
           <v-icon>mdi-cart-outline</v-icon>
-          {{ cartCount }}        
         </v-btn>
       </v-card-actions>
     </template>    
     <v-dialog v-model="dialog" scrollable class="dialog">
       <v-card class="card">
-          <div v-for="(product, index) in cart" :key="index">
-            <v-card-title>{{ product.name }}</v-card-title>
-              <img :src="product.url" alt />
+          <div v-for="(product, index) in cart2" v-bind:key="index">
+            <v-card-title>{{ product.Name }}</v-card-title>
+              <img :src="product.Url" alt />
             <v-card-text>
-              <p>{{ '$' + product.price }}</p>
-              <v-btn @click="removeItem(index)" color="error">Remover do Carrinho</v-btn>
+              <p>{{ '$' + product.Price }}</p>
+              <v-btn @click="removeItem(product.Name)" color="error">Remover do Carrinho</v-btn>
             </v-card-text>
           </div>
       </v-card>
@@ -28,23 +27,14 @@ export default {
   name: "Shopping",
   data(){
     return{
-      dialog: false
+      dialog: false,
+      cart2: null
     }
   },
   computed: {
-    StoreCart() {
-      return this.$store.getters.cart;
+    cart(){
+      return this.getCart() 
     },
-    cartCount() {
-      return this.cart.length;
-    },
-    cart() {
-      return this.$store.getters.cart.map(cartitems => {
-        return this.$store.getters.products.find(itemForSale => {
-          return cartitems === itemForSale.name;
-        });
-      });
-    }
   },
   methods: {
     removeItem(index) {
@@ -61,6 +51,9 @@ export default {
           modal.style.display = "none";
         }
       };
+    },
+    getCart() {
+      this.cart2 = this.$store.state.cart
     }
   }
 };
